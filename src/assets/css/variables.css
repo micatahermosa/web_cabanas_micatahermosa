@@ -1,0 +1,36 @@
+/* ==========================================================
+   Variables — colors, fonts, spacing
+   Project: Mi Cata Hermosa
+   ========================================================== */
+
+:root {
+  /* -- Colors ---------------------------------------------- */
+  --color-charcoal:   #292524;
+  --color-stone:      #73695f;
+  --color-terracotta: #c2755c;
+  --color-terracotta-pop: #f0835f;
+  --color-warm-gray:  #78716c;
+  --color-white:      #fefefe;
+  --color-linen:      #f5f5f4;
+  
+
+  --color-text: var(--color-stone);
+  --color-bg:   var(--color-white);
+
+  /* -- Fonts ----------------------------------------------- */
+  --font-display: "Baskervvol", Georgia, serif;
+  --font-body:    "Jost", system-ui, sans-serif;
+  /* --font-body: "Baskervvol", Georgia, serif; */
+  --font-ui:      system-ui, sans-serif;
+
+  /* -- Spacing scale --------------------------------------- */
+  --space-xs:  clamp(0.25rem, 0.5vw, 0.5rem);
+  --space-sm:  clamp(0.5rem, 1vw, 0.75rem);
+  --space-md:  clamp(1rem, 2vw, 1.5rem);
+  --space-lg:  clamp(1.5rem, 3vw, 2.5rem);
+  --space-xl:  clamp(2.5rem, 5vw, 4.5rem);
+  --space-2xl: clamp(4rem, 8vw, 7rem);
+  --space-3xl: clamp(6rem, 12vw, 10rem);
+}
+
+

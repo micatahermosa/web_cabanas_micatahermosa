@@ -1,0 +1,71 @@
+/* ==========================================================
+   @font-face — Baskervvol (variable) + Jost (static weights)
+   ========================================================== */
+
+/* -- Baskervvol: variable weight, roman + italic ---------- */
+
+@font-face {
+  font-family: "Baskervvol";
+  src: url("../fonts/BBBBaskervvolVF.woff2") format("woff2");
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Baskervvol";
+  src: url("../fonts/BBBBaskervvol-ItalicVF.woff2") format("woff2");
+  font-weight: 400 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* -- Jost: static weights --------------------------------- */
+
+@font-face {
+  font-family: "Jost";
+  src: url("../fonts/Jost-400-Book.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Jost";
+  src: url("../fonts/Jost-400-BookItalic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Jost";
+  src: url("../fonts/Jost-500-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Jost";
+  src: url("../fonts/Jost-500-MediumItalic.woff2") format("woff2");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Jost";
+  src: url("../fonts/Jost-700-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Jost";
+  src: url("../fonts/Jost-700-BoldItalic.woff2") format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}

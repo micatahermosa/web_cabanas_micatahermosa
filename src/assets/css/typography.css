@@ -1,0 +1,171 @@
+/* ==========================================================
+   Typography — optical sizes, semantic classes, vertical rhythm
+
+   Expects project-level custom properties:
+     --font-display, --font-body, --font-mono (optional)
+     --color-text
+     --space-xs through --space-2xl
+   ========================================================== */
+
+
+/* -- Optical line-height scale ----------------------------- */
+/* Tighter as size increases — the foundational rule.         */
+
+:root {
+  --leading-display: .92;
+  --leading-heading-lg: 1.05;
+  --leading-heading: 1.2;
+  --leading-heading-sm: 1.3;
+  --leading-body: 1.35;
+  --leading-body-relaxed: 1.75;
+}
+
+
+/* -- Measure (line length) --------------------------------- */
+/* From book typography: 60-75ch for body text.               */
+
+:root {
+  --measure: 65ch;
+  --measure-narrow: 45ch;
+  --measure-wide: 75ch;
+}
+
+
+/* -- Base -------------------------------------------------- */
+
+body {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 0.3vw + 0.95rem, 1.125rem);
+  line-height: var(--leading-body);
+  font-weight: 400;
+  color: var(--color-text);
+  text-wrap: pretty;
+}
+
+
+/* -- Headings: shared properties, no sizes ----------------- */
+/* Sizes come from visual hierarchy classes below.            */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  line-height: var(--leading-heading);
+  text-wrap: balance;
+}
+
+
+/* -- Visual hierarchy classes ------------------------------ */
+/* Decouple visual size from document structure.              */
+/* An h2 can be .site-title; an h3 can be .title.            */
+/* Each class sets its own optical line-height and tracking.  */
+
+.site-title {
+  font-size: clamp(2.5rem, 5vw + 1rem, 4rem);
+  line-height: var(--leading-display);
+  letter-spacing: -0.03em;
+}
+
+.title {
+  font-size: clamp(1.75rem, 3vw + 0.5rem, 2.85rem);
+  line-height: var(--leading-heading-lg);
+  letter-spacing: -0.02em;
+  font-weight: 500;
+}
+
+.subtitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.55rem, 2vw + 0.3rem, 2.05rem);
+  line-height: var(--leading-heading-lg);
+  letter-spacing: -0.01em;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.card-title {
+  font-size: clamp(1.05rem, 1vw + 0.5rem, 1.35rem);
+  line-height: var(--leading-heading-sm);
+}
+
+.label {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: clamp(0.75rem, 0.5vw + 0.6rem, 0.865rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  margin-block-end: 0;
+}
+
+.label + :is(h1, h2, h3, h4, h5, h6) {
+  margin-block-start: var(--space-xs);
+}
+
+
+/* -- Body text --------------------------------------------- */
+
+p {
+  max-width: var(--measure-narrow);
+  text-wrap: balance;
+}
+
+.lead {
+  font-size: clamp(1.1rem, 0.8vw + 0.85rem, 1.35rem);
+  line-height: var(--leading-body-relaxed);
+  max-width: var(--measure-wide);
+  text-wrap: balance;
+}
+
+small, .small {
+  font-size: 0.875rem;
+}
+
+
+/* -- Vertical rhythm --------------------------------------- */
+/* Proximity principle: more space BEFORE a heading than      */
+/* AFTER it. A heading belongs to the content that follows.   */
+/* :where() gives zero specificity — easy to override.        */
+
+:where(* + :is(h1, h2, h3, h4, h5, h6)) {
+  margin-block-start: var(--space-xl);
+}
+
+:where(* + :is(h4, h5, h6)) {
+  margin-block-start: var(--space-lg);
+}
+
+:where(:is(h1, h2, h3, h4, h5, h6) + *) {
+  margin-block-start: var(--space-xs);
+}
+
+:where(p + p) {
+  margin-block-start: var(--space-sm);
+}
+
+
+/* -- Accessibility ----------------------------------------- */
+
+.visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

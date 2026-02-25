@@ -1,0 +1,357 @@
+/* ==========================================================
+   Layout — grid foundation, compositions, stacking, flow
+
+   Grid: 7 columns — gutter + 5 content + gutter.
+   Sections fill the viewport. Content is constrained by the
+   grid, not by max-width. Outer columns grow on wide screens,
+   giving content room without capping section width.
+
+   5 content columns yield natural 3:2 and 2:3 splits.
+
+   Expects --space-* scale defined at project level.
+   ========================================================== */
+
+
+/* -- Layout variables -------------------------------------- */
+
+:root {
+  --gutter: clamp(1rem, 3vw, 2rem);
+  --section-space: clamp(3rem, 8vh, 7rem);
+  --layout-gap: var(--space-lg, 1.5rem);
+  --layout-double-gap: calc(var(--layout-gap) * 2);
+}
+
+
+/* -- Section base ------------------------------------------ */
+/* <section> and <footer> share the same grid.               */
+/* No wrappers needed.                                        */
+
+section, footer {
+  display: grid;
+  grid-template-columns:
+    [full-start] minmax(var(--gutter), .5fr)
+    [content-start] repeat(5, 1fr)
+    [content-end] minmax(var(--gutter), .5fr)
+    [full-end];
+  column-gap: var(--layout-gap);
+}
+
+section {
+  row-gap: var(--layout-gap);
+  padding-block: var(--section-space);
+  align-items: start;
+}
+
+/* Default: children sit in the content area */
+section > * {
+  grid-column: content;
+}
+
+
+/* -- Full bleed -------------------------------------------- */
+
+.full-bleed {
+  grid-column: full;
+}
+
+
+/* ==========================================================
+   Compositions
+   Common column arrangements. Apply class on <section>.
+   Children use .col-a / .col-b for placement.
+
+   Default alignment: columns face the center gap.
+   col-a text-aligns right, col-b text-aligns left.
+   Both reset to left-aligned when stacked (see Stacking).
+   ========================================================== */
+
+
+/* -- Column defaults: face the center ---------------------- */
+
+:is(.three-two, .two-three, .split, .halves,
+    .edge-right, .edge-left) > .col-a {
+  text-align: right;
+  justify-self: end;
+}
+
+:is(.three-two, .two-three, .split, .halves,
+    .edge-right, .edge-left) > .col-b {
+  text-align: left;
+  justify-self: start;
+}
+
+/* Paragraphs inside right-aligned columns: push to the right */
+:is(.three-two, .two-three, .split, .halves,
+    .edge-right, .edge-left) > .col-a p,
+:is(.three-two, .two-three, .split, .halves,
+    .edge-right, .edge-left) > .col-a .lead {
+  margin-inline-start: auto;
+}
+
+
+/* -- Centered: single column, measure-constrained ---------- */
+
+.centered > :not(.col-a, .col-b) {
+  justify-self: center;
+  text-align: center;
+}
+
+.centered p,
+.centered .lead {
+  margin-inline: auto;
+}
+
+
+/* -- 3:2 ratio --------------------------------------------- */
+
+.three-two > .col-a { grid-column: content-start / span 3; }
+.three-two > .col-b { grid-column: span 2 / content-end; }
+
+
+/* -- 2:3 ratio --------------------------------------------- */
+
+.two-three > .col-a { grid-column: content-start / span 2; }
+.two-three > .col-b { grid-column: span 3 / content-end; }
+
+
+/* -- 1:1 ratio --------------------------------------------- */
+/* 5 columns don't split evenly, so .halves uses a nested     */
+/* grid inside a .cols wrapper spanning the content area.      */
+
+.halves > .cols {
+  grid-column: content;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--layout-double-gap);
+  align-items: start;
+}
+
+
+/* ==========================================================
+   Edge bleed (horizontal)
+   One column extends to the viewport edge.
+   Section keeps its padding-block — only the column placement
+   changes. Compose with .bleed for vertical bleed too.
+   ========================================================== */
+
+/* Right bleed: col-b extends past gutter to viewport edge */
+.edge-right > .col-a { grid-column: content-start / span 3; }
+.edge-right > .col-b { grid-column: span 3 / full-end; }
+
+/* Left bleed: col-a extends past gutter to viewport edge */
+.edge-left > .col-a { grid-column: full-start / span 3; }
+.edge-left > .col-b { grid-column: span 3 / content-end; }
+
+
+/* ==========================================================
+   Vertical bleed
+   Removes section padding-block so content (typically images)
+   can extend to the section's top/bottom edges.
+   Text children get the spacing re-applied automatically.
+   Composable: works with .edge-*, .three-two, or any section.
+
+   .edge-right           → horizontal bleed only
+   .edge-right .bleed    → horizontal + vertical bleed
+   .bleed                → vertical bleed only
+   ========================================================== */
+
+.bleed {
+  overflow: hidden;
+  padding-block: 0;
+}
+
+.bleed > :not(:has(img, picture, video)) {
+  padding-block: var(--section-space);
+}
+
+
+/* ==========================================================
+   Hero
+   Full-viewport section with stacked image + content.
+   Visual treatment (colors, opacity) is project-level CSS.
+   ========================================================== */
+
+.hero {
+  height: 100dvh;
+  max-height: 100dvh;
+  padding-block: 0;
+  grid-template-rows: 1fr;
+  overflow: hidden;
+}
+
+.hero > .hero-img {
+  grid-column: full;
+  grid-row: 1 / -1;
+  overflow: hidden;
+}
+
+.hero > .hero-img,
+.hero > .hero-img picture,
+.hero > .hero-img img {
+  height: 100%;
+}
+
+.hero > .hero-img img {
+  width: 100%;
+  object-fit: cover;
+}
+
+.hero > .hero-content {
+  grid-column: content;
+  grid-row: 1 / -1;
+  z-index: 1;
+  align-self: center;
+  max-width: var(--measure-wide, 75ch);
+  padding-block: var(--space-xl);
+}
+
+
+/* ==========================================================
+   Stacking
+   Two layers work together:
+
+   @container — styles children (column placement, text align).
+     Can't style the container itself (CSS spec limitation).
+
+   @media — styles the section itself (padding, overflow).
+
+   Both use the same rem value so they trigger in sync.
+   (ch units compute differently in each context — container
+   uses the section's font, media uses the browser default.)
+
+   On small screens, ALL sections behave identically:
+   normal padding, no bleed, no edge, single column, left-aligned.
+   ========================================================== */
+
+
+/* -- Children: @container ---------------------------------- */
+
+@media (max-width: 52rem) {
+
+  /* Columns collapse to full content width.
+     :is() list matches composition specificity (0,2,0). */
+  :is(.three-two, .two-three, .edge-right, .edge-left,
+      .split, .halves, .bleed, section) > .col-a,
+  :is(.three-two, .two-three, .edge-right, .edge-left,
+      .split, .halves, .bleed, section) > .col-b {
+    grid-column: content;
+    text-align: left;
+    justify-self: stretch;
+  }
+
+  /* Paragraphs reset to natural flow */
+  :is(.three-two, .two-three, .edge-right, .edge-left,
+      .split, .halves, section) > .col-a p,
+  :is(.three-two, .two-three, .edge-right, .edge-left,
+      .split, .halves, section) > .col-a .lead {
+    margin-inline-start: 0;
+  }
+
+  /* 1:1 nested grid collapses too */
+  .halves > .cols {
+    grid-template-columns: 1fr;
+  }
+
+  /* Bleed: text column drops its compensating padding */
+  .bleed > :not(:has(img, picture, video)) {
+    padding-block: 0;
+    padding-inline: 0;
+  }
+
+  /* Stack order: reverse col-a / col-b when stacked.
+     Apply .stack-reverse on the <section>.
+     Default: col-a on top (source order).
+     .stack-reverse: col-b on top. */
+  .stack-reverse > .col-a { order: 2; }
+  .stack-reverse > .col-b { order: 1; }
+}
+
+
+/* -- Section itself: @media -------------------------------- */
+/* Resets section-level properties that @container can't touch */
+
+@media (max-width: 52rem) {
+
+  /* Bleed sections: restore normal padding */
+  section.bleed {
+    padding-block: var(--section-space);
+    overflow: visible;
+  }
+
+  /* Edge sections: no more horizontal bleed either */
+  section.edge-right,
+  section.edge-left {
+    overflow: visible;
+  }
+
+  /* Fixed gutters on small screens — no 1fr growth */
+  section, footer {
+    grid-template-columns:
+      [full-start] 1rem
+      [content-start] 1fr
+      [content-end] 1rem
+      [full-end];
+    padding-block: var(--space-xl);
+  }
+}
+
+
+/* ==========================================================
+   Flow spacing
+   Vertical rhythm between siblings inside content columns.
+   :where() for zero specificity — project CSS overrides easily.
+   ========================================================== */
+
+:where(.col-a, .col-b, .hero-content, .halves .cols > *) > * + * {
+  margin-block-start: var(--space-sm, 0.75rem);
+}
+
+/* Title blocks inside columns: match grid row-gap spacing */
+/* :where(.col-a, .col-b) > :is(h1, h2, h3, h4, h5, h6):first-child + * {
+  margin-block-start: var(--layout-gap);
+} */
+
+
+/* ==========================================================
+   Alignment utilities
+   Override defaults on grid children.
+   ========================================================== */
+
+/* Vertical */
+.top     { align-self: start; }
+.middle  { align-self: center; }
+.bottom  { align-self: end; }
+
+/* Text */
+.text-left   { text-align: left; }
+.text-center { text-align: center; }
+.text-right  { text-align: right; }
+
+
+/* ==========================================================
+   Image cover
+   Stretch image to fill its grid cell height.
+   Pair with .anchor-* to control crop position.
+   ========================================================== */
+
+.cover         { align-self: stretch; }
+.cover picture { height: 100%; }
+.cover img     { width: 100%; height: 100%; object-fit: cover; }
+
+/* Image columns top-align by default (unless .cover) */
+:where(section) > :has(img):not(.cover) {
+  align-self: start;
+}
+
+
+/* ==========================================================
+   Image anchor
+   Controls which part of the image stays visible when
+   cropped by object-fit: cover. Works on .cover elements
+   and on .hero-img.
+   ========================================================== */
+
+.anchor-top    img { object-position: top; }
+.anchor-bottom img { object-position: bottom; }
+.anchor-left   img { object-position: left; }
+.anchor-right  img { object-position: right; }

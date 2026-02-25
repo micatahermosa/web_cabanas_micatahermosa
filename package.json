@@ -1,0 +1,24 @@
+{
+  "name": "mi-cata-hermosa",
+  "version": "3.0.0",
+  "private": true,
+  "scripts": {
+    "start": "SITE_URL=http://localhost:8080 npm run build && concurrently \"browser-sync start --server www --files 'www/**/*' --no-notify --port 8080\" \"chokidar 'src/**/*' -c 'SITE_URL=http://localhost:8080 npm run build'\"",
+    "build:assets": "node scripts/copy-assets.js",
+    "build:css": "postcss src/assets/css/styles.css -o www/assets/css/styles.css",
+    "build:js": "node scripts/build-js.js",
+    "build:html": "node scripts/build-html.js",
+    "build": "npm run build:assets && npm run build:css && npm run build:js && npm run build:html"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "browser-sync": "^3.0.4",
+    "chokidar-cli": "^3.0.0",
+    "concurrently": "^9.2.1",
+    "cssnano": "^7.0.6",
+    "postcss": "^8.4.49",
+    "postcss-cli": "^11.0.0",
+    "postcss-import": "^16.1.0",
+    "terser": "^5.37.0"
+  }
+}

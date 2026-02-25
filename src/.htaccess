@@ -1,0 +1,20 @@
+# Compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml
+</IfModule>
+
+# Cache headers
+# CSS/JS: 1 year — safe because build injects ?v=YYYYMMDD query string for cache busting
+# Fonts/images: 1 year — filenames never change
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css                "access plus 1 year"
+  ExpiresByType application/javascript  "access plus 1 year"
+  ExpiresByType image/webp              "access plus 1 year"
+  ExpiresByType image/jpeg              "access plus 1 year"
+  ExpiresByType image/svg+xml          "access plus 1 year"
+  ExpiresByType font/woff2              "access plus 1 year"
+</IfModule>
+
+# Default charset
+AddDefaultCharset UTF-8

@@ -1,0 +1,1166 @@
+/* ==========================================================
+   Mi Cata Hermosa — Project Styles
+   ========================================================== */
+
+@import "variables.css";
+@import "fontface.css";
+@import "reset.css";
+@import "typography.css";
+@import "layout.css";
+
+
+/* ==========================================================
+   General
+   ========================================================== */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+}
+
+em {
+  font-style: italic;
+}
+
+.label {
+  color: var(--color-terracotta);
+}
+
+.label + :is(h1, h2, h3, h4, h5, h6) {
+  margin-block-start: 0;
+}
+
+p {
+  color: var(--color-warm-gray);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-stone);
+}
+
+img {
+  border-radius: 4px;
+}
+
+
+/* ==========================================================
+   Header
+   ========================================================== */
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) var(--space-lg);
+  pointer-events: none;
+}
+
+.site-header > * {
+  pointer-events: auto;
+}
+
+
+/* Language nav — visible on desktop */
+.header-lang {
+  display: flex;
+  gap: 0.75rem;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.header-lang a {
+  color: var(--color-linen);
+  text-decoration: none;
+  opacity: 0.6;
+  transition: opacity 0.2s, color 0.2s;
+}
+
+.header-lang a[aria-current="page"],
+.header-lang a:hover {
+  opacity: 1;
+  color: var(--color-terracotta);
+}
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--color-white);
+  cursor: pointer;
+  padding: 0.75rem;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
+}
+
+.hamburger-close {
+  display: none;
+}
+
+/* Desktop: hide hamburger and nav links, show lang outside nav */
+.header-nav > ul {
+  display: none;
+}
+
+.header-nav > .header-lang {
+  display: none;
+}
+
+/* Desktop: header overlays hero but scrolls away */
+@media (min-width: 52rem) {
+  .site-header {
+    position: absolute;
+  }
+}
+
+/* Mobile nav */
+@media (max-width: 52rem) {
+  /* Hide the desktop lang nav (the one outside .header-nav) */
+  .site-header > .header-lang {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+    margin-inline-start: auto;
+  }
+
+  .header-nav {
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-lg);
+    background-color: rgba(36, 47, 52, 0.8);
+    background-color: color-mix(in srgb, #242f34cd 95%, transparent);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+  }
+
+  .header-nav.open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .header-nav > ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .header-nav > ul a {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    color: var(--color-linen);
+    text-decoration: none;
+    line-height: var(--leading-heading);
+  }
+
+  .header-nav.open > .header-lang {
+    display: flex;
+  }
+
+  .hamburger {
+    z-index: 101;
+  }
+
+  .header-nav.open ~ .hamburger .hamburger-open {
+    display: none;
+  }
+
+  .header-nav.open ~ .hamburger .hamburger-close {
+    display: block;
+  }
+}
+
+
+/* ==========================================================
+   Hero — panoramic slideshow + baselines
+   Section fills 100dvh via grid-template-rows: 1fr auto.
+   Slider (row 1, 1fr) and content share the same grid row —
+   grid overlap trick, no absolute positioning. Baselines auto.
+   ========================================================== */
+
+.hero-pano {
+  height: 100dvh;
+  grid-template-rows: 1fr auto;
+  row-gap: 0;
+  padding-block: 0;
+}
+
+
+/* -- Slider wrapper --------------------------------------- */
+/* Spans full width. Height comes from the 1fr grid row.     */
+/* Content overlays via shared grid-row (Jen Simmons trick). */
+
+.hero-pano-slider {
+  grid-column: full;
+  grid-row: 1;
+  position: relative;
+  overflow: hidden;
+  align-self: stretch;
+  height: 100%; /* explicit height so abs. positioned children can resolve inset: 0 */
+}
+
+/* -- Mobile static image — hidden by default, shown on mobile -- */
+.hero-static {
+  display: none;
+  position: absolute;
+  inset: 0;
+}
+
+.hero-static img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+
+/* -- Slideshow -------------------------------------------- */
+/* All layers use inset: 0 — no percentage heights anywhere. */
+
+.slideshow {
+  position: absolute;
+  inset: 0;
+}
+
+.slideshow-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 2s ease;
+}
+
+.slideshow-slide.active {
+  opacity: 1;
+}
+
+.slideshow-slide img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+/* -- Gradient overlay ------------------------------------- */
+
+.hero-pano-slider::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* background: linear-gradient(
+    to right,
+    transparent 25%,
+    color-mix(in srgb, var(--color-charcoal) 25%, transparent) 50%,
+    color-mix(in srgb, var(--color-charcoal) 55%, transparent) 100%
+  ); */
+  background: linear-gradient( 
+    to right, 
+    #62718345 0%,
+    #212b2ea6 60%,
+    #242f34cd 100% 
+    );
+  
+  z-index: 1;
+  pointer-events: none;
+}
+
+
+/* -- Dots ------------------------------------------------- */
+
+.slideshow-dots {
+  position: absolute;
+  bottom: var(--space-md);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: var(--space-xs);
+  z-index: 3;
+}
+
+.slideshow-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-white);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.3s;
+}
+
+.slideshow-dot.active {
+  background: var(--color-white);
+}
+
+.slideshow-dot:hover {
+  background: color-mix(in srgb, var(--color-white) 60%, transparent);
+}
+
+
+/* -- Content block ---------------------------------------- */
+/* Grid child in row 1 — overlays the slider via shared row. */
+/* Placed on the right 3 content columns, vertically centered. */
+
+.hero-pano-content {
+  grid-column: span 3 / full-end;
+  grid-row: 1;
+  align-self: center;
+  z-index: 2;
+  max-width: 50ch;
+  color: var(--color-linen);
+  text-shadow: 0 1px 18px rgba(3, 13, 29, 0.4);
+}
+
+.hero-pano-content > * + * {
+  margin-block-start: var(--space-sm);
+}
+
+.hero-pano-content .logo-icon {
+  width: clamp(6rem, 7vw, 8.5rem);
+  height: auto;
+  color: var(--color-linen);
+}
+
+.hero-pano-content .label {
+  color: var(--color-terracotta-pop);
+}
+
+.hero-pano-content .site-title {
+  color: var(--color-linen);
+  margin-block-start: var(--space-xs);
+}
+
+.hero-pano-content .site-title span {
+  display: block;
+  letter-spacing: 0;
+}
+
+.hero-pano-content .subtitle {
+  color: var(--color-linen);
+  margin-block-start: var(--space-sm);
+}
+
+.hero-pano-content p:not(.label):not(.subtitle) {
+  color: color-mix(in srgb, var(--color-linen) 80%, transparent);
+  max-width: 38ch;
+  font-size: clamp(0.95rem, 0.8vw + 0.85rem, 1.25rem);
+  line-height: var(--leading-heading-sm);
+}
+
+/* Buttons — shared base */
+.btn {
+  display: inline-block;
+  margin-block-start: var(--space-md);
+  padding: 0.5em 1.25em;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  border: 1.5px solid currentColor;
+  border-radius: 2rem;
+  text-decoration: none;
+  transition: background 0.3s, color 0.3s;
+}
+
+.btn-reservar {
+  background: var(--color-linen);
+  color: var(--color-charcoal);
+}
+
+.btn-reservar:hover {
+  background: transparent;
+  color: var(--color-linen);
+}
+
+
+/* -- Baselines -------------------------------------------- */
+
+.baselines-grid {
+  grid-column: content;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-xl);
+  padding-block: var(--space-lg) var(--space-xl);
+  text-align: center;
+}
+
+.baseline-item svg {
+  width: 2rem;
+  height: 2rem;
+  color: var(--color-terracotta);
+  margin-inline: auto;
+  margin-block-end: var(--space-sm);
+}
+
+.baseline-item .card-title {
+  font-size: clamp(1.05rem, 1vw + 0.5rem, 1.45rem);
+  font-weight: 600;
+  color: var(--color-stone);
+  margin-block-start: var(--space-xs);
+  margin-block-end: var(--space-xs);
+}
+
+.baseline-item p {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--color-warm-gray);
+  font-size: 1.18rem;
+  max-width: 38ch;
+  margin-inline: auto;
+  line-height: 1.4;
+  text-wrap: balance;
+}
+
+
+/* -- Mobile hero ------------------------------------------ */
+
+@media (max-width: 52rem) {
+  .hero-pano {
+    height: auto;
+    grid-template-rows: auto auto;
+  }
+
+  .hero-pano-slider {
+    height: 100dvh;
+  }
+
+  .hero-pano-slider::after {
+    background: linear-gradient( 
+      to bottom, 
+      #62718345 0%,
+      #212e2da6 45%,
+      #242f34cd 100% 
+    );
+  }
+
+  .hero-pano-content .site-title {
+    font-size: clamp(2rem, 9vw, 3.6rem);
+  }
+
+  .baselines-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .slideshow {
+      display: none;
+  }
+  .hero-static {
+      display: block;
+  }
+}
+
+@media (max-width: 52rem) {
+  .hero-pano-content {
+    grid-column: content;
+    align-self: end;
+    padding-block-end: var(--space-3xl);
+    max-width: none;
+  }
+}
+
+@media (max-width: 28rem) {
+  .baselines-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ==========================================================
+   Cabañas
+   ========================================================== */
+
+.cabanas-section {
+  background-color: var(--color-linen);
+}
+
+/* .cabanas-section + .cabanas-section {
+  background-color: var(--color-white);
+} */
+
+/* Gallery trigger image */
+.gallery-trigger {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 4px;
+  box-shadow: 0 3px 5px color-mix(in srgb, var(--color-charcoal) 10%, transparent);
+}
+
+.gallery-trigger img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.gallery-trigger:hover img {
+  transform: scale(1.03);
+}
+
+.gallery-trigger .gallery-hint {
+  position: absolute;
+  bottom: var(--space-sm);
+  left: var(--space-sm);
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--color-white);
+  background: rgba(41, 37, 36, 0.6);
+  background: color-mix(in srgb, var(--color-charcoal) 60%, transparent);
+  padding: 0.3em 0.8em;
+  border-radius: 1rem;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+/* Cabaña text block */
+.cabanas-section .subtitle {
+  color: var(--color-stone);
+}
+
+.cabanas-section .subtitle em {
+  font-family: var(--font-display);
+}
+
+/* Ver fotos button */
+.btn-fotos {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  background: var(--color-terracotta);
+  color: var(--color-linen);
+  border-color: var(--color-terracotta);
+}
+
+.btn-fotos:hover {
+  background: transparent;
+  color: var(--color-terracotta);
+}
+
+/* Hidden gallery items (not shown on page, only in lightbox) */
+.gallery-hidden {
+  display: none;
+}
+
+/* Vertical centering for text column */
+.cabanas-section > .col-a,
+.cabanas-section > .col-b {
+  align-self: center;
+}
+
+/* .cabanas-section .middle {
+  max-width: 40ch;
+  text-wrap: balance;
+} */
+
+
+/* ==========================================================
+   Servicios
+   ========================================================== */
+
+.servicios {
+  background-color: var(--color-white);
+}
+
+.servicios-heading {
+  grid-column: content-start / span 2;
+}
+
+.servicios-heading .servicios-intro {
+  position: relative;
+  padding-inline-start: var(--space-md);
+}
+
+.servicios-heading .servicios-intro::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.2em;
+  bottom: 0.2em;
+  width: 2px;
+  background-color: var(--color-terracotta);
+}
+
+.servicios-cols {
+  grid-column: span 3 / content-end;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg) var(--space-2xl);
+}
+
+.servicios-secondary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.servicios-group h3 {
+  font-family: var(--font-body);
+  font-size: clamp(0.75rem, 0.5vw + 0.6rem, 0.875rem);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-warm-gray);
+  padding-block-end: var(--space-xs);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-warm-gray) 25%, transparent);
+  margin-block-end: var(--space-sm);
+}
+
+.servicios-group ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.servicios-group li {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  font-size: 0.95rem;
+  color: var(--color-stone);
+}
+
+.servicios-group li svg {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--color-terracotta);
+}
+
+@media (max-width: 52rem) {
+  .servicios-heading {
+    grid-column: content;
+  }
+
+  .servicios-cols {
+    grid-column: content;
+  }
+}
+
+@media (max-width: 28rem) {
+  .servicios-cols {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ==========================================================
+   Ubicación + Nosotros
+   ========================================================== */
+
+.ubicacion-nosotros {
+  background-color: var(--color-linen);
+}
+
+/* Flow spacing inside halves children */
+.ubicacion-col > * + *,
+.nosotros-col > * + * {
+  margin-block-start: var(--space-sm);
+}
+
+/* Map */
+.ubicacion-col iframe {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 1.8;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  display: block;
+  margin-block-start: var(--space-md);
+  overflow: hidden;
+  box-shadow: 0 3px 10px color-mix(in srgb, var(--color-charcoal) 15%, transparent);
+}
+
+.ubicacion-col address {
+  font-style: normal;
+}
+
+.ubicacion-col address p {
+  color: var(--color-warm-gray);
+}
+
+.nosotros-col {
+  max-width: 52ch;
+}
+
+@media (max-width: 52rem) {
+  #nosotros {
+    scroll-margin-top: 2rem; /* As nosotros is kind of a subsection it's an exception */
+  }
+}
+
+/* Nosotros — round photo */
+.nosotros-photo {
+  width: clamp(8rem, 12vw, 11rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  float: right;
+  shape-outside: circle(50%);
+  margin-inline-start: var(--space-md);
+  margin-block-end: var(--space-sm);
+  box-shadow: 0 3px 7px color-mix(in srgb, var(--color-charcoal) 12%, transparent);
+}
+
+.nosotros-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Ratings row */
+.ratings {
+  clear: both;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-block-start: var(--space-lg);
+  padding-block-start: var(--space-sm);
+  border-top: 1px solid color-mix(in srgb, var(--color-warm-gray) 20%, transparent);
+}
+
+.rating-item {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  font-size: 0.85rem;
+  color: var(--color-warm-gray);
+}
+
+.rating-item svg {
+  color: var(--color-terracotta);
+}
+
+.rating-item strong {
+  color: var(--color-stone);
+}
+
+.rating-item a {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s;
+}
+
+.rating-item a:hover {
+  color: var(--color-terracotta);
+}
+
+.rating-item a:hover strong {
+  color: var(--color-terracotta);
+}
+
+
+
+/* ==========================================================
+   Disfruta Catamarca — stacked intro + 4 gallery cards
+   ========================================================== */
+
+.catamarca {
+  background-color: var(--color-white);
+}
+
+.catamarca-intro > * + * {
+  margin-block-start: var(--space-sm);
+}
+
+.catamarca-galleries {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--layout-gap);
+}
+
+.catamarca-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.catamarca-card .gallery-trigger picture {
+  display: block;
+}
+
+.catamarca-card .gallery-trigger img {
+  height: auto;
+  aspect-ratio: 4 / 3;
+}
+
+
+@media (max-width: 52rem) {
+  .catamarca-galleries {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 28rem) {
+  .catamarca-galleries {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ==========================================================
+   Footer
+   ========================================================== */
+
+.site-footer {
+  background-color: var(--color-terracotta);
+  color: var(--color-linen);
+  padding-block: var(--space-xl);
+  align-items: center;
+  row-gap: var(--space-lg);
+}
+
+/* Footer logo */
+.footer-logo {
+  grid-column: content-start / span 2;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--color-linen);
+}
+
+.footer-logo .logo-icon {
+  width: clamp(6.2rem, 8vw, 9rem);
+  height: auto;
+}
+
+.footer-logo-text {
+  font-family: var(--font-display);
+  line-height: 1.15;
+}
+
+.footer-logo-text small,
+.footer-contact small {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-charcoal) 60%, transparent);
+}
+
+.footer-logo-text .footer-name {
+  font-size: clamp(1.2rem, 2vw, 1.7rem);
+}
+
+/* Footer contact */
+.footer-contact {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  line-height: 1.3;
+}
+
+.footer-contact a,
+.footer-contact p {
+  color: color-mix(in srgb, var(--color-linen) 95%, transparent);
+  text-decoration: none;
+  font-size: 0.9rem;
+  max-width: none;
+  margin: 0;
+}
+
+.footer-contact a:hover {
+  color: var(--color-linen);
+}
+
+/* Footer social — nested inside footer-contact, no grid placement */
+.footer-social {
+  display: flex;
+  gap: var(--space-sm);
+  margin-block-start: var(--space-xs);
+}
+
+.footer-social a {
+  display: block;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.footer-social a:hover {
+  opacity: 0.85;
+}
+
+/* Copyright */
+.footer-copy {
+  grid-column: span 1 / content-end;
+  justify-self: end;
+  align-self: center;
+  text-align: right;
+  font-size: 0.75rem;
+  color: var(--color-linen);
+  opacity: 0.45;
+  max-width: none;
+}
+
+/* Ensure all footer text inherits linen, not warm-gray from global p */
+.site-footer p {
+  color: inherit;
+}
+
+@media (max-width: 52rem) {
+  .footer-logo,
+  .footer-contact,
+  .footer-copy {
+    grid-column: content;
+    justify-self: start;
+    text-align: left;
+  }
+
+  /* .footer-name-sub {
+    display: block;
+  } */
+}
+
+
+/* ==========================================================
+   WhatsApp floating button
+   ========================================================== */
+
+.whatsapp-float {
+  position: fixed;
+  bottom: var(--space-md);
+  right: var(--space-md);
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background-color: #25d366;
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 4px 12px color-mix(in srgb, #000 25%, transparent);
+  transition: transform 0.2s;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.08);
+}
+
+
+/* ==========================================================
+   GLightbox overrides
+   ========================================================== */
+
+.goverlay {
+  background: rgba(33, 38, 41, 0.65) !important;
+  background: color-mix(in srgb, #24292c 65%, transparent) !important; 
+  -webkit-backdrop-filter: blur(10px) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+/* Image sizing + inset — desktop only, mobile uses GLightbox defaults */
+@media (min-width: 769px) {
+  .gslide-media {
+    max-width: 90vw !important;
+  }
+
+  .gslide-image img {
+    max-height: 75vh !important;
+  }
+
+  .ginner-container {
+    margin-block: var(--space-lg) !important;
+  }
+}
+
+/* Force description below image at all sizes */
+@media (min-width: 769px) {
+  .glightbox-container .ginner-container.desc-bottom {
+    flex-direction: column;
+  }
+}
+
+/* Mobile: pull description out of absolute-bottom, place below image, centered */
+.glightbox-mobile .glightbox-container .gslide-description {
+  position: static !important;
+  flex: 0 0 auto !important;
+  background: transparent !important;
+  text-align: center !important;
+  padding: var(--space-sm) var(--space-md) !important;
+  max-height: none !important;
+}
+
+.glightbox-mobile .glightbox-container .gslide-image img {
+  max-height: 70vh !important;
+}
+
+.glightbox-mobile .glightbox-container .gslide-title {
+  color: var(--color-linen) !important;
+}
+
+/* Transparent caption — text on dark overlay, no white box */
+.glightbox-clean .gslide-description {
+  background: transparent;
+}
+
+.glightbox-clean .gdesc-inner {
+  padding: var(--space-xs) 0;
+}
+
+.glightbox-clean .gslide-title {
+  font-size: 0.95rem;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  color: var(--color-linen) !important;
+  margin-bottom: 1px;
+  line-height: 1.3;
+}
+
+.glightbox-clean .gslide-desc {
+  font-size: 0.85rem;
+  font-family: var(--font-ui);
+  color: var(--color-warm-gray);
+  line-height: 0.2;
+}
+
+.glightbox-clean .gslide-description p {
+  margin-bottom: 0;
+}
+
+/* Navigation buttons — minimal style */
+.glightbox-clean .gnext,
+.glightbox-clean .gprev,
+.glightbox-clean .gclose {
+  background: transparent;
+  border: none;
+  width: 3rem;
+  height: 3rem;
+}
+
+.glightbox-clean .gnext svg,
+.glightbox-clean .gprev svg,
+.glightbox-clean .gclose svg {
+  fill: var(--color-linen);
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.glightbox-clean .gnext:hover svg,
+.glightbox-clean .gprev:hover svg,
+.glightbox-clean .gclose:hover svg {
+  opacity: 1;
+  fill: var(--color-terracotta);
+}
+
+
+/* ==========================================================
+   Legal modal
+   ========================================================== */
+
+#legal-modal:focus {
+  outline: none;
+}
+
+#legal-modal {
+  margin: auto;
+  max-width: min(90vw, 60ch);
+  max-height: 85dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-lg);
+  border: none;
+  border-radius: 6px;
+  background-color: var(--color-linen);
+}
+
+#legal-modal::backdrop {
+  background-color: rgba(41, 37, 36, 0.75);
+  background-color: color-mix(in srgb, var(--color-charcoal) 75%, transparent);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+#legal-modal[open] {
+  animation: dialog-in 0.2s ease;
+}
+
+@keyframes dialog-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.legal-close {
+  display: block;
+  margin-inline-start: auto;
+  background: none;
+  border: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  color: var(--color-stone);
+  padding: var(--space-xs);
+  transition: color 0.2s;
+}
+
+.legal-close:hover {
+  color: var(--color-charcoal);
+}
+
+#legal-modal > * + * {
+  margin-block-start: var(--space-xs);
+}
+
+#legal-modal > h3 {
+  margin-block-start: var(--space-md);
+}
+
+#legal-modal > h3:first-of-type {
+  margin-block-start: var(--space-sm);
+}
+
+#legal-modal a {
+  color: var(--color-terracotta);
+  text-decoration: none;
+}
+
+#legal-modal a:hover {
+  text-decoration: underline;
+}
+
+/* Footer trigger button — inline, looks like text */
+.legal-trigger {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
