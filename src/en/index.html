@@ -15,6 +15,9 @@
     <link rel="preload" href="../assets/fonts/BBBBaskervvolVF.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="../assets/fonts/Jost-400-Book.woff2" as="font" type="font/woff2" crossorigin>
 
+    <!-- Hero slide 1 preload — desktop only (mobile uses static image instead) -->
+    <link rel="preload" href="../images/hero-slides/01.webp" as="image" type="image/webp" media="(min-width: 52rem)">
+
     <!-- Styles -->
     <link rel="stylesheet" href="../assets/css/glightbox.min.css">
     <link rel="stylesheet" href="../assets/css/styles.css">
@@ -68,28 +71,28 @@
             <div class="hero-pano-slider">
                 <div class="slideshow" data-slideshow data-interval="7000">
                     <picture class="slideshow-slide active">
-                        <source srcset="../images/hero-slides/01.webp" type="image/webp">
-                        <img src="../images/hero-slides/01.jpg" alt="Panoramic view of the cabins surrounded by vegetation" width="1600" height="681">
+                        <source data-srcset="../images/hero-slides/01.webp" type="image/webp">
+                        <img data-src="../images/hero-slides/01.jpg" alt="Panoramic view of the cabins surrounded by vegetation" width="1600" height="681">
                     </picture>
                     <picture class="slideshow-slide">
-                        <source srcset="../images/hero-slides/02.webp" type="image/webp">
-                        <img src="../images/hero-slides/02.jpg" alt="Dining area, Mi Cata Hermosa, Catamarca" width="1600" height="681">
+                        <source data-srcset="../images/hero-slides/02.webp" type="image/webp">
+                        <img data-src="../images/hero-slides/02.jpg" alt="Dining area, Mi Cata Hermosa, Catamarca" width="1600" height="681">
                     </picture>
                     <picture class="slideshow-slide">
-                        <source srcset="../images/hero-slides/03.webp" type="image/webp">
-                        <img src="../images/hero-slides/03.jpg" alt="Bedroom, Mi Cata Hermosa, Catamarca" width="1600" height="681">
+                        <source data-srcset="../images/hero-slides/03.webp" type="image/webp">
+                        <img data-src="../images/hero-slides/03.jpg" alt="Bedroom, Mi Cata Hermosa, Catamarca" width="1600" height="681">
                     </picture>
                     <picture class="slideshow-slide">
-                        <source srcset="../images/hero-slides/04.webp" type="image/webp">
-                        <img src="../images/hero-slides/04.jpg" alt="Kitchen, Mi Cata Hermosa, Catamarca" width="1600" height="681">
+                        <source data-srcset="../images/hero-slides/04.webp" type="image/webp">
+                        <img data-src="../images/hero-slides/04.jpg" alt="Kitchen, Mi Cata Hermosa, Catamarca" width="1600" height="681">
                     </picture>
                     <picture class="slideshow-slide">
-                        <source srcset="../images/hero-slides/05.webp" type="image/webp">
-                        <img src="../images/hero-slides/05.jpg" alt="Living room, Mi Cata Hermosa, Catamarca" width="1600" height="681">
+                        <source data-srcset="../images/hero-slides/05.webp" type="image/webp">
+                        <img data-src="../images/hero-slides/05.jpg" alt="Living room, Mi Cata Hermosa, Catamarca" width="1600" height="681">
                     </picture>
                     <picture class="slideshow-slide">
-                        <source srcset="../images/hero-slides/06.webp" type="image/webp">
-                        <img src="../images/hero-slides/06.jpg" alt="Bedroom, Mi Cata Hermosa, Catamarca" width="1600" height="681">
+                        <source data-srcset="../images/hero-slides/06.webp" type="image/webp">
+                        <img data-src="../images/hero-slides/06.jpg" alt="Bedroom, Mi Cata Hermosa, Catamarca" width="1600" height="681">
                     </picture>
                     <div class="slideshow-dots" role="tablist" aria-label="Slideshow images">
                         <button class="slideshow-dot active" role="tab" aria-selected="true" aria-label="Image 1"></button>
