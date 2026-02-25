@@ -1,4 +1,4 @@
-# Mi Cata Hermosa v3
+# Mi Cata Hermosa
 
 Trilingual static website (ES/EN/FR) for Cabañas Mi Cata Hermosa, Catamarca, Argentina.
 
