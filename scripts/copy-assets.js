@@ -7,6 +7,7 @@ const copies = [
   { src: 'src/assets/css/glightbox.min.css', out: 'www/assets/css/glightbox.min.css' },
   { src: 'src/images',                out: 'www/images' },
   { src: 'src/.htaccess',             out: 'www/.htaccess' },
+  { src: 'src/favicon.svg',          out: 'www/favicon.svg' },
 ];
 
 for (const { src, out } of copies) {
