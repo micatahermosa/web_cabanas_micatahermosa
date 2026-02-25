@@ -17,7 +17,7 @@ src/              Source files — edit here
   images/         Content photos
   .htaccess       Apache config — copied to www/ at build time
 
-www/              Build output — upload this to OVH via FTP
+www/              Build output to deplaoy
 scripts/          Node build scripts
 ```
 
@@ -59,7 +59,7 @@ SITE_URL=https://staging.example.com/testfolder npm run build
 ## Deploy
 
 1. `npm run build`
-2. Upload the contents of `www/` to OVH via SFTP
+2. Upload the contents of `www/` to server
 
 
 ### Note on Gzip — server-side via .htaccess
@@ -71,7 +71,7 @@ Verify after deploy: DevTools → Network → HTML file → Response Headers →
 ### Note: Cloudflare (future improvement)
 
 OVH is in France. Most visitors are in South America (~250ms RTT). Gzip reduces payload
-but can't reduce latency. **Cloudflare free tier** would be the real fix: edge nodes in
+but can't reduce latency. **Cloudflare free tier** would be an option to consider: edge nodes in
 São Paulo and Buenos Aires would serve the site locally. Setup: create a free Cloudflare
 account, point domain nameservers to Cloudflare, done. It also handles Brotli compression
 automatically (better than gzip, ~15% smaller). No code changes needed.
