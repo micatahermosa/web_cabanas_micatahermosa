@@ -46,26 +46,3 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: "Jost";
-  src: url("../fonts/Jost-500-MediumItalic.woff2") format("woff2");
-  font-weight: 500;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Jost";
-  src: url("../fonts/Jost-700-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Jost";
-  src: url("../fonts/Jost-700-BoldItalic.woff2") format("woff2");
-  font-weight: 700;
-  font-style: italic;
-  font-display: swap;
-}
