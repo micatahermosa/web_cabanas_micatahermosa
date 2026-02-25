@@ -1,4 +1,4 @@
-# Mi Cata Hermosa v3 — Todo
+# Mi Cata Hermosa — Todo
 
 ## Phase 1 — Typography & Design Details
 

@@ -143,8 +143,7 @@ img {
     align-items: center;
     justify-content: center;
     gap: var(--space-lg);
-    background-color: rgba(36, 47, 52, 0.8);
-    background-color: color-mix(in srgb, #242f34cd 95%, transparent);
+    background-color: var(--overlay-bg);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     opacity: 0;
@@ -383,14 +382,14 @@ img {
   transition: background 0.3s, color 0.3s;
 }
 
+.btn:hover {
+  background: transparent;
+  color: var(--color-linen);
+}
+
 .btn-reservar {
   background: var(--color-linen);
   color: var(--color-charcoal);
-}
-
-.btn-reservar:hover {
-  background: transparent;
-  color: var(--color-linen);
 }
 
 
@@ -528,7 +527,6 @@ img {
   font-family: var(--font-body);
   font-size: 0.8rem;
   color: var(--color-white);
-  background: rgba(41, 37, 36, 0.6);
   background: color-mix(in srgb, var(--color-charcoal) 60%, transparent);
   padding: 0.3em 0.8em;
   border-radius: 1rem;
@@ -556,7 +554,6 @@ img {
 }
 
 .btn-fotos:hover {
-  background: transparent;
   color: var(--color-terracotta);
 }
 
@@ -864,10 +861,11 @@ img {
 .footer-logo-text small,
 .footer-contact small {
   display: block;
-  font-family: var(--font-body);
+  font-family: var(--font-ui);
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  font-weight: 700;
   color: color-mix(in srgb, var(--color-charcoal) 60%, transparent);
 }
 
@@ -978,8 +976,7 @@ img {
    ========================================================== */
 
 .goverlay {
-  background: rgba(33, 38, 41, 0.65) !important;
-  background: color-mix(in srgb, #24292c 65%, transparent) !important; 
+  background: var(--overlay-bg) !important;
   -webkit-backdrop-filter: blur(10px) !important;
   backdrop-filter: blur(10px) !important;
 }
@@ -1100,8 +1097,7 @@ img {
 }
 
 #legal-modal::backdrop {
-  background-color: rgba(41, 37, 36, 0.75);
-  background-color: color-mix(in srgb, var(--color-charcoal) 75%, transparent);
+  background-color: var(--overlay-bg);
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
 }

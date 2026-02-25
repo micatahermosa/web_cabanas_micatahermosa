@@ -1,6 +1,6 @@
 # Mi Cata Hermosa
 
-Trilingual static website (ES/EN/FR) for Cabañas Mi Cata Hermosa, Catamarca, Argentina.
+Trilingual static landing page (ES/EN/FR) for Cabañas Mi Cata Hermosa, Catamarca, Argentina.
 
 ## Project structure
 
@@ -17,7 +17,7 @@ src/              Source files — edit here
   images/         Content photos
   .htaccess       Apache config — copied to www/ at build time
 
-www/              Build output to deplaoy
+www/              Build output to deploy
 scripts/          Node build scripts
 ```
 
