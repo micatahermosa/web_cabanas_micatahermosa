@@ -45,6 +45,10 @@ img {
   border-radius: 4px;
 }
 
+.logo-icon {
+  height: auto;
+}
+
 
 /* ==========================================================
    Header
@@ -338,7 +342,6 @@ img {
 
 .hero-pano-content .logo-icon {
   width: clamp(6rem, 7vw, 8.5rem);
-  height: auto;
   color: var(--color-linen);
 }
 
@@ -834,7 +837,7 @@ img {
   background-color: var(--color-terracotta);
   color: var(--color-linen);
   padding-block: var(--space-xl);
-  align-items: center;
+  align-items: start;
   row-gap: var(--space-lg);
 }
 
@@ -850,7 +853,6 @@ img {
 
 .footer-logo .logo-icon {
   width: clamp(6.2rem, 8vw, 9rem);
-  height: auto;
 }
 
 .footer-logo-text {
@@ -868,9 +870,12 @@ img {
   font-weight: 700;
   color: color-mix(in srgb, var(--color-charcoal) 60%, transparent);
 }
-
 .footer-logo-text .footer-name {
   font-size: clamp(1.2rem, 2vw, 1.7rem);
+}
+
+.footer-contact small {
+  margin-block-end: .2rem; /* fix visually separate from contact details */
 }
 
 /* Footer contact */
@@ -878,15 +883,15 @@ img {
   grid-column: span 2;
   display: flex;
   flex-direction: column;
-  gap: 0.05rem;
-  line-height: 1.3;
+  gap: clamp(0.05rem, 0.5vw, 0.25rem);
+  line-height: 1.15;
 }
 
 .footer-contact a,
 .footer-contact p {
   color: color-mix(in srgb, var(--color-linen) 95%, transparent);
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: clamp(1.2rem, 2vw, 1.2rem);
   max-width: none;
   margin: 0;
 }
@@ -895,17 +900,24 @@ img {
   color: var(--color-linen);
 }
 
-/* Footer social — nested inside footer-contact, no grid placement */
+/* Footer social — direct grid child, placed under footer-contact (content cols 3–4) */
+/* Line 4 = after content col 2, line 6 = after content col 4 (5-column grid) */
 .footer-social {
+  grid-column: 4 / 6;
   display: flex;
   gap: var(--space-sm);
-  margin-block-start: var(--space-xs);
+  align-self: start;
 }
 
 .footer-social a {
   display: block;
   text-decoration: none;
   transition: opacity 0.2s;
+}
+
+.footer-social svg {
+  width: 2.625rem;
+  height: 2.625rem;
 }
 
 .footer-social a:hover {
@@ -920,7 +932,7 @@ img {
   text-align: right;
   font-size: 0.75rem;
   color: var(--color-linen);
-  opacity: 0.45;
+  opacity: 0.65;
   max-width: none;
 }
 
@@ -929,18 +941,27 @@ img {
   color: inherit;
 }
 
+@media (min-width: 52rem) {
+  .site-footer {
+    row-gap: var(--space-sm);
+  }
+}
+
 @media (max-width: 52rem) {
   .footer-logo,
   .footer-contact,
+  .footer-social,
   .footer-copy {
     grid-column: content;
     justify-self: start;
     text-align: left;
   }
 
-  /* .footer-name-sub {
-    display: block;
-  } */
+  .footer-logo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
 }
 
 
