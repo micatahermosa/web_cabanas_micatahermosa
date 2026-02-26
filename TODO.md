@@ -15,6 +15,10 @@
 
 ## Phase 3 — Technical Fixes
 - [x] **Google Map — cross-origin / CSP check** — Test for `X-Frame-Options` or CSP errors in console. Fallback if needed: static map image linking to Google Maps, or a plain CTA button with coordinates.
+- [ ] **Google Map — retest on definitive server** — Map doesn't show in Firefox on the test server (`intersticios.com/cab/`) but works fine in all other browsers. Ruled out Firefox ETP: other Maps embeds work fine on Firefox elsewhere, and disabling ETP fixes it on this server → points to the test server's non-standard `.htaccess` (CSP / Referrer-Policy / Permissions-Policy headers). No action needed until deployed at root on the definitive server. If still failing then:
+  1. Firefox DevTools → Console: look for explicit CSP violation or mixed-content warning
+  2. DevTools → Network → click the HTML response → check `Response Headers` for `Content-Security-Policy`, `Referrer-Policy`, `Permissions-Policy`
+  3. If server headers are clean and it still fails: implement the image-probe fallback — try loading `https://maps.gstatic.com/mapfiles/transparent.png`, show iframe on load, show static map screenshot + Google Maps link on error
 
 ---
 
