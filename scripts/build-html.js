@@ -38,6 +38,32 @@ const pages = [
   },
 ];
 
+const ldjson = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'LodgingBusiness',
+  'name': 'Cabañas Mi Cata Hermosa',
+  'url': 'https://www.micatahermosa.com',
+  'telephone': '+5493834318577',
+  'email': 'cabanasmicatahermosa@gmail.com',
+  'address': {
+    '@type': 'PostalAddress',
+    'streetAddress': 'RP106 n° 2167',
+    'addressLocality': 'San Fernando del Valle de Catamarca',
+    'addressRegion': 'Catamarca',
+    'addressCountry': 'AR',
+  },
+  'geo': {
+    '@type': 'GeoCoordinates',
+    'latitude': -28.425147495815988,
+    'longitude': -65.73518954576475,
+  },
+  'checkinTime': '15:00',
+  'checkoutTime': '11:00',
+  'priceRange': '$$',
+  'currenciesAccepted': 'ARS, USD',
+  'availableLanguage': ['Spanish', 'English', 'French'],
+}, null, 2);
+
 const hreflang = [
   `<link rel="alternate" hreflang="es"        href="${SITE_URL}/">`,
   `<link rel="alternate" hreflang="en"        href="${SITE_URL}/en/">`,
@@ -54,6 +80,9 @@ for (const page of pages) {
   const injection = hreflang + `\n    <meta property="og:url" content="${page.url}">`;
   html = html.replace('<!-- hreflang: added by build script (Phase 7) -->', injection);
 
+  // Inject structured data
+  html = html.replace('<!-- ld+json: added by build script -->', `<script type="application/ld+json">\n    ${ldjson.replace(/\n/g, '\n    ')}\n    </script>`);
+
   // Rewrite relative language switcher links to absolute URLs
   for (const [pattern, replacement] of page.langLinks) {
     html = html.replace(pattern, replacement);
@@ -68,3 +97,15 @@ for (const page of pages) {
   fs.writeFileSync(page.out, html);
   console.log(`✓ ${page.out}`);
 }
+
+// sitemap.xml
+const today = new Date().toISOString().slice(0, 10);
+const sitemapUrls = pages.map(p => `  <url>\n    <loc>${p.url}</loc>\n    <lastmod>${today}</lastmod>\n  </url>`).join('\n');
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapUrls}\n</urlset>\n`;
+fs.writeFileSync('www/sitemap.xml', sitemap);
+console.log('✓ www/sitemap.xml');
+
+// robots.txt
+const robots = `User-agent: *\nAllow: /\nSitemap: ${SITE_URL}/sitemap.xml\n`;
+fs.writeFileSync('www/robots.txt', robots);
+console.log('✓ www/robots.txt');
