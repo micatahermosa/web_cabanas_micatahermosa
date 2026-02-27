@@ -872,6 +872,7 @@ img {
 }
 .footer-logo-text .footer-name {
   font-size: clamp(1.2rem, 2vw, 1.7rem);
+  text-wrap: nowrap;
 }
 
 .footer-contact small {
