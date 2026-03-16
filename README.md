@@ -68,10 +68,8 @@ SITE_URL=https://staging.example.com/testfolder npm run build
 
 Verify after deploy: DevTools → Network → HTML file → Response Headers → `content-encoding: gzip`.
 
-### Note: Cloudflare (future improvement)
+### Note: 
 
-OVH is in France. Most visitors are in South America (~250ms RTT). Gzip reduces payload
-but can't reduce latency. **Cloudflare free tier** would be an option to consider: edge nodes in
-São Paulo and Buenos Aires would serve the site locally. Setup: create a free Cloudflare
-account, point domain nameservers to Cloudflare, done. It also handles Brotli compression
-automatically (better than gzip, ~15% smaller). No code changes needed.
+Domain --> OVH Canada
+Hosting --> Netlify (hosting + DNS in Brazil)
+GitHub repo --> Deploy to Netlify via GitHub Actions (deploy.yml)
