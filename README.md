@@ -6,8 +6,8 @@ Multilingual static landing page (ES/EN/FR) for Cabañas Mi Cata Hermosa, Catama
 
 **Domain**: OVH Canada (`micatahermosa.com`)  
 **DNS**: OVH Canada (points to Netlify)  
-**Hosting**: Netlify (CDN via AWS CloudFront, São Paulo PoP for Argentina)  
-**Repository**: GitHub private repo (`micatahermosa/web_cabanas_micatahermosa`)  
+**Hosting**: Netlify (CDN via AWS CloudFront, São Paulo PoP for Argentina) >> Free account, so github repo needs to be public, but we can keep it private and deploy manually via Netlify dashboard if needed. 
+**Repository**: GitHub ~~private~~ repo (`micatahermosa/web_cabanas_micatahermosa`)  
 **Deployment**: Automatic via Netlify on push to `main` branch
 
 ## Project structure
