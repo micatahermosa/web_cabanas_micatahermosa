@@ -98,4 +98,4 @@ Netlify automatically handles:
 - **Cache headers**: Optimized automatically
 - **HTTP/2**: Enabled by default
 
-Cache busting via `?v=YYYYMMDD` ensures updates are always visible.
+Cache busting adds date stamps on css/js files, ensures updates are always visible.
