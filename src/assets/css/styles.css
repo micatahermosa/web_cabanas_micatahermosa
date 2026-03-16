@@ -382,6 +382,7 @@ img {
   border: 1.5px solid currentColor;
   border-radius: 2rem;
   text-decoration: none;
+  cursor: pointer;
   transition: background 0.3s, color 0.3s;
 }
 

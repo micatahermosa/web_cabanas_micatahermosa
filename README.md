@@ -1,6 +1,14 @@
 # Mi Cata Hermosa
 
-Trilingual static landing page (ES/EN/FR) for Cabañas Mi Cata Hermosa, Catamarca, Argentina.
+Multilingual static landing page (ES/EN/FR) for Cabañas Mi Cata Hermosa, Catamarca, Argentina.
+
+## Infrastructure
+
+**Domain**: OVH Canada (`micatahermosa.com`)  
+**DNS**: OVH Canada (points to Netlify)  
+**Hosting**: Netlify (CDN via AWS CloudFront, São Paulo PoP for Argentina)  
+**Repository**: GitHub private repo (`micatahermosa/web_cabanas_micatahermosa`)  
+**Deployment**: Automatic via Netlify on push to `main` branch
 
 ## Project structure
 
@@ -15,9 +23,8 @@ src/              Source files — edit here
     fonts/
     imgs/         UI assets: logo, icons
   images/         Content photos
-  .htaccess       Apache config — copied to www/ at build time
 
-www/              Build output to deploy
+www/              Build output (deployed to Netlify)
 scripts/          Node build scripts
 ```
 
@@ -32,13 +39,13 @@ npm install
 | Command | What it does |
 |---|---|
 | `npm start` | Build, serve `www/` at `http://localhost:8080`, and watch for changes — rebuilds on save, browser auto-reloads |
-| `npm run build` | Build everything into `www/` (with const SITE_URL setup in build-html.js) |
+| `npm run build` | Build everything into `www/` (with SITE_URL from environment variable) |
 
 `www/` is fully regenerated on every build. Safe to delete and rebuild from scratch.
 
 ## What the build does
 
-1. **assets** `node scripts/copy-assets.js` — Copies fonts, images, imgs, glightbox files, and `.htaccess` to `www/`
+1. **assets** `node scripts/copy-assets.js` — Copies fonts, images, imgs, and glightbox files to `www/`
 2. **css** `postcss src/assets/css/styles.css -o www/assets/css/styles.css` — PostCSS merges all `@import`s into one file, autoprefixes, and minifies
 3. **js** `node scripts/build-js.js` — Terser minifies `script.js` and `slideshow.js`; `glightbox.min.js` is copied as-is
 4. **html** `node scripts/build-html.js` — For each of the three pages:
@@ -46,30 +53,49 @@ npm install
    - Rewrites language switcher links from relative to absolute URLs
    - Appends `?v=YYYYMMDD` to all CSS/JS references for cache busting
 
-## Testing against a staging URL
+## Environment variables
 
-Pass `SITE_URL` as an environment variable — no need to edit any file:
+**SITE_URL**: Base URL for absolute links (hreflang, og:url, language switcher)
+
+Set in Netlify: **Site settings** → **Environment variables** → `SITE_URL=https://www.micatahermosa.com`
+
+For local testing with a staging URL:
 
 ```bash
-SITE_URL=https://staging.example.com/testfolder npm run build
+SITE_URL=https://staging.example.com npm run build
 ```
 
-`npm start` does this automatically with `http://localhost:8080`, so local language links always point to localhost.
+`npm start` uses `http://localhost:8080` automatically.
 
-## Deploy
+## Deployment
+
+### Automatic (recommended)
+
+Push to `main` branch triggers automatic deployment via Netlify:
+
+```bash
+git add .
+git commit -m "Update content"
+git push origin main
+```
+
+Netlify will:
+1. Run `npm run build`
+2. Deploy `www/` to CDN
+3. Site live in 1-2 minutes at `https://www.micatahermosa.com`
+
+### Manual (if needed)
 
 1. `npm run build`
-2. Upload the contents of `www/` to server
+2. Drag and drop `www/` folder into Netlify dashboard
 
+## Performance
 
-### Note on Gzip — server-side via .htaccess
+Netlify automatically handles:
+- **Compression**: Brotli/Gzip for all assets
+- **CDN**: Global edge network (São Paulo PoP serves Argentina)
+- **SSL**: Let's Encrypt certificate (auto-renewed)
+- **Cache headers**: Optimized automatically
+- **HTTP/2**: Enabled by default
 
-`src/.htaccess` is copied to `www/.htaccess` by build:assets. It configures Apache (OVH) to compress HTML/CSS/JS/SVG/WOFF2 on-the-fly via mod_deflate — no pre-compression needed on shared hosting. Cache headers are 1 year; the build date stamp (`?v=YYYYMMDD`) on asset URLs invalidates the cache on rebuild.
-
-Verify after deploy: DevTools → Network → HTML file → Response Headers → `content-encoding: gzip`.
-
-### Note: 
-
-Domain --> OVH Canada
-Hosting --> Netlify (hosting + DNS in Brazil)
-GitHub repo --> Deploy to Netlify via GitHub Actions (deploy.yml)
+Cache busting via `?v=YYYYMMDD` ensures updates are always visible.
