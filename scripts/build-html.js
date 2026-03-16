@@ -1,8 +1,8 @@
 const fs   = require('fs');
 const path = require('path');
 
-// const SITE_URL = process.env.SITE_URL || 'https://www.micatahermosa.com';
-const SITE_URL = process.env.SITE_URL || 'https://www.intersticios.com/cab';
+const SITE_URL = process.env.SITE_URL || 'https://www.micatahermosa.com';
+// const SITE_URL = process.env.SITE_URL || 'https://www.intersticios.com/cab';
 const VERSION  = new Date().toISOString().slice(0, 10).replace(/-/g, '');
 
 const pages = [
