@@ -66,7 +66,7 @@ const ldjson = JSON.stringify({
 }, null, 2);
 
 const hreflang = [
-  `<link rel="alternate" hreflang="es"        href="${SITE_URL}/">`,
+  `<link rel="alternate" hreflang="es-AR""        href="${SITE_URL}/">`,
   `<link rel="alternate" hreflang="en"        href="${SITE_URL}/en/">`,
   `<link rel="alternate" hreflang="fr"        href="${SITE_URL}/fr/">`,
   `<link rel="alternate" hreflang="x-default" href="${SITE_URL}/">`,
